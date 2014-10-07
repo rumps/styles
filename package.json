@@ -1,0 +1,26 @@
+{
+  "name": "rump-styles",
+  "description": "Rump piece for building CSS",
+  "author": "Juan Placencia",
+  "version": "0.1.2",
+  "license": "MIT",
+  "homepage": "https://github.com/rumps/rump-styles",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rumps/rump-styles"
+  },
+  "main": "./index.js",
+  "dependencies": {
+    "merge": "^1.2.0",
+    "require-all": "0.0.8",
+    "rework-plugin-at2x": "^1.0.2",
+    "gulp-csso": "~0.2.9",
+    "gulp-myth": "^1.0.1",
+    "gulp-plumber": "~0.6.6",
+    "gulp-rework": "^1.0.2",
+    "gulp-util": "^3.0.1"
+  },
+  "peerDependencies": {
+    "rump": "~0.1.1"
+  }
+}
