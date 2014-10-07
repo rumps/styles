@@ -1,10 +1,11 @@
 'use strict';
 
-var rump = require('rump');
+var rump = module.exports = require('rump');
 var configs = require('./configs');
+var originalAddGulpTasks = rump.addGulpTasks;
 
-exports.addGulpTasks = function() {
-  rump.addGulpTasks();
+rump.addGulpTasks = function() {
+  originalAddGulpTasks();
   require('./gulp');
 };
 
