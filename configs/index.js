@@ -1,10 +1,10 @@
 'use strict';
 
-var merge = require('merge');
+var extend = require('extend');
 var rump = require('rump');
 
 exports.rebuild = function() {
-  rump.configs.main.globs = merge.recursive({
+  rump.configs.main.globs = extend(true, {
     build: {
       styles: '*.css'
     },
@@ -13,7 +13,7 @@ exports.rebuild = function() {
     }
   }, rump.configs.main.globs);
 
-  rump.configs.main.paths = merge.recursive({
+  rump.configs.main.paths = extend(true, {
     source: {
       styles: 'styles'
     },
