@@ -12,6 +12,7 @@
   "main": "./index.js",
   "dependencies": {
     "extend": "^2.0.0",
+    "globule": "^0.2.0",
     "require-all": "^0.0.8",
     "rework-plugin-at2x": "^1.0.2",
     "gulp-csso": "^0.2.9",
