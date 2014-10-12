@@ -7,6 +7,7 @@ var originalAddGulpTasks = rump.addGulpTasks;
 rump.addGulpTasks = function() {
   originalAddGulpTasks();
   require('./gulp');
+  return rump;
 };
 
 rump.on('update:main', function() {
