@@ -28,7 +28,7 @@ gulp.task('rump:info:styles', function() {
 
   console.log();
   console.log(chalk.magenta('--- Styles'));
-  console.log('Process CSS from', chalk.green(source),
+  console.log('Processed CSS from', chalk.green(source),
               'is', action,
               'to', chalk.green(destination));
 
