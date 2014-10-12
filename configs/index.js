@@ -21,6 +21,11 @@ exports.rebuild = function() {
       styles: 'styles'
     }
   }, rump.configs.main.paths);
+
+  rump.configs.main.styles = extend(true, {
+    minify: rump.configs.main.environment === 'production',
+    sourceMap: rump.configs.main.environment === 'development'
+  }, rump.configs.main.styles);
 };
 
 exports.rebuild();

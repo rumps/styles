@@ -16,15 +16,13 @@ gulp.task('rump:build:styles', function() {
                          rump.configs.main.globs.build.styles);
   var destination = path.join(rump.configs.main.paths.destination.root,
                               rump.configs.main.paths.destination.styles);
-  var development = rump.configs.main.environment === 'development';
-  var production = rump.configs.main.environment === 'production';
 
   return gulp
   .src([source].concat(rump.configs.main.globs.global))
   .pipe((rump.configs.watch ? plumber : util.noop)())
-  .pipe(myth({sourcemap: development}))
-  .pipe(rework(at2x(), {sourcemap: development}))
-  .pipe((production ? csso : util.noop)())
+  .pipe(myth({sourcemap: rump.configs.main.styles.sourceMap}))
+  .pipe(rework(at2x(), {sourcemap: rump.configs.main.styles.sourceMap}))
+  .pipe((rump.configs.main.styles.minify ? csso : util.noop)())
   .pipe(gulp.dest(destination));
 });
 

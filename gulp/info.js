@@ -21,19 +21,18 @@ gulp.task('rump:info:styles', function() {
     return;
   }
 
-  switch(rump.configs.main.environment) {
-    case 'development':
-      action = 'copied ' + chalk.yellow('with source maps');
-      break;
-    case 'production':
-      action = chalk.yellow('minified') + ' and copied';
-      break;
+  if(rump.configs.main.styles.sourceMap) {
+    action += ' ' + chalk.yellow('with source maps');
+  }
+
+  if(rump.configs.main.styles.minify) {
+    action = chalk.yellow('minified') + ' and ' + action;
   }
 
   console.log();
   console.log(chalk.magenta('--- Styles'));
-  console.log('Processed CSS from', chalk.green(source),
-              'is', action,
+  console.log('Processed CSS files from', chalk.green(source),
+              'are', action,
               'to', chalk.green(destination));
   console.log('Affected files:');
   files.forEach(function(file) {
