@@ -17,6 +17,10 @@ gulp.task('rump:info:styles', function() {
                               rump.configs.main.paths.destination.styles);
   var action = 'copied';
 
+  if(!files.length) {
+    return;
+  }
+
   switch(rump.configs.main.environment) {
     case 'development':
       action = 'copied ' + chalk.yellow('with source maps');
@@ -31,13 +35,10 @@ gulp.task('rump:info:styles', function() {
   console.log('Processed CSS from', chalk.green(source),
               'is', action,
               'to', chalk.green(destination));
-
-  if(files.length) {
-    console.log('Affected files:');
-    files.forEach(function(file) {
-      console.log(chalk.blue(path.relative(source, file)));
-    });
-  }
+  console.log('Affected files:');
+  files.forEach(function(file) {
+    console.log(chalk.blue(path.relative(source, file)));
+  });
 
   console.log();
 });
