@@ -11,6 +11,7 @@
   },
   "main": "./index.js",
   "dependencies": {
+    "chalk": "^0.5.1",
     "extend": "^2.0.0",
     "globule": "^0.2.0",
     "require-all": "^0.0.8",
