@@ -16,10 +16,10 @@
     "globule": "^0.2.0",
     "require-all": "^0.0.8",
     "rework-plugin-at2x": "^1.0.2",
-    "gulp-csso": "^0.2.9",
-    "gulp-myth": "^1.0.1",
+    "gulp-pleeease": "^1.0.4",
     "gulp-plumber": "^0.6.6",
     "gulp-rework": "^1.0.2",
+    "gulp-sourcemaps": "^1.2.2",
     "gulp-util": "^3.0.1"
   },
   "peerDependencies": {

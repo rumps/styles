@@ -1,13 +1,13 @@
 'use strict';
 
 var at2x = require('rework-plugin-at2x');
-var csso = require('gulp-csso');
 var gulp = require('gulp');
-var myth = require('gulp-myth');
 var path = require('path');
+var pleeease = require('gulp-pleeease');
 var plumber = require('gulp-plumber');
 var rework = require('gulp-rework');
 var rump = require('rump');
+var sourcemaps = require('gulp-sourcemaps');
 var util = require('gulp-util');
 
 gulp.task('rump:build:styles', function() {
@@ -16,13 +16,15 @@ gulp.task('rump:build:styles', function() {
                          rump.configs.main.globs.build.styles);
   var destination = path.join(rump.configs.main.paths.destination.root,
                               rump.configs.main.paths.destination.styles);
+  var sourceMap = rump.configs.main.styles.sourceMap;
 
   return gulp
   .src([source].concat(rump.configs.main.globs.global))
   .pipe((rump.configs.watch ? plumber : util.noop)())
-  .pipe(myth({sourcemap: rump.configs.main.styles.sourceMap}))
-  .pipe(rework(at2x(), {sourcemap: rump.configs.main.styles.sourceMap}))
-  .pipe((rump.configs.main.styles.minify ? csso : util.noop)())
+  .pipe(rework(at2x(), {sourcemap: sourceMap}))
+  .pipe((sourceMap ? sourcemaps.init : util.noop)({loadMaps: true}))
+  .pipe(pleeease(rump.configs.pleeease))
+  .pipe((sourceMap ? sourcemaps.write : util.noop)())
   .pipe(gulp.dest(destination));
 });
 

@@ -1,6 +1,7 @@
 'use strict';
 
 var extend = require('extend');
+var path = require('path');
 var rump = require('rump');
 
 exports.rebuild = function() {
@@ -26,6 +27,19 @@ exports.rebuild = function() {
     minify: rump.configs.main.environment === 'production',
     sourceMap: rump.configs.main.environment === 'development'
   }, rump.configs.main.styles);
+
+  exports.pleeease = extend(true, {
+    import: {
+      path: [
+        'node_modules',
+        'bower_components',
+        path.join(rump.configs.main.paths.source.root,
+                  rump.configs.main.paths.source.styles)
+      ]
+    },
+    next: true,
+    minifier: rump.configs.main.styles.minify
+  }, rump.configs.main.styles.pleeease);
 };
 
 exports.rebuild();

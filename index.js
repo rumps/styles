@@ -14,3 +14,9 @@ rump.on('update:main', function() {
   configs.rebuild();
   rump.emit('update:styles');
 });
+
+Object.defineProperty(rump.configs, 'pleeease', {
+  get: function() {
+    return configs.pleeease;
+  }
+});
