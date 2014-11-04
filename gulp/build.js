@@ -21,10 +21,10 @@ gulp.task(rump.taskName('build:styles'), function() {
   return gulp
     .src([source].concat(rump.configs.main.globs.global))
     .pipe((rump.configs.watch ? plumber : util.noop)())
-    .pipe(rework(at2x(), {sourcemap: sourceMap}))
-    .pipe((sourceMap ? sourcemaps.init : util.noop)({loadMaps: true}))
+    .pipe((sourceMap ? sourcemaps.init : util.noop)())
     .pipe(pleeease(rump.configs.pleeease))
     .pipe((sourceMap ? sourcemaps.write : util.noop)())
+    .pipe(rework(at2x()))
     .pipe(gulp.dest(destination));
 });
 
