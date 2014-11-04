@@ -17,15 +17,15 @@ The following is appended to the core Rump API:
 
 ### `rump.addGulpTasks()`
 This module adds the following tasks:
-- `rump:build:styles` will process CSS stylesheets with Pleeease. For more
-  information on source and destination paths see `rump.configure()` below.
-  This task is also added to the `rump:build` task.
-- `rump:watch:styles` will run `rump:build:styles`, then monitor for changes
-  and process updated files as needed. This task is also added to the
-  `rump:watch` task.
-- `rump:info:styles` will display information on what this specific module
-  does, specifically the source and destination paths as well as what files
-  would get processed. This task is also added to the `rump:info` task.
+
+- `build:styles` will process CSS stylesheets with Pleeease. For more
+information on source and destination paths see `rump.configure()` below. This
+task is also added to the `build` task.
+- `watch:styles` will run `build:styles`, then monitor for changes and process
+updated files as needed. This task is also added to the `watch` task.
+- `info:styles` will display information on what this specific module does,
+specifically the source and destination paths as well as what files would get
+processed. This task is also added to the `info` task.
 
 ### `rump.configure(options)`
 Redefine options for Rump and Rump modules to follow. In addition to what

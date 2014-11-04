@@ -7,7 +7,7 @@ var path = require('path');
 var rump = require('rump');
 var pkg = require('../package');
 
-gulp.task('rump:info:styles', function() {
+gulp.task(rump.taskName('info:styles'), function() {
   var glob = path.join(rump.configs.main.paths.source.root,
                        rump.configs.main.paths.source.styles,
                        rump.configs.main.globs.build.styles);
@@ -43,4 +43,4 @@ gulp.task('rump:info:styles', function() {
   console.log();
 });
 
-gulp.tasks['rump:info'].dep.push('rump:info:styles');
+gulp.tasks[rump.taskName('info')].dep.push(rump.taskName('info:styles'));

@@ -10,7 +10,7 @@ var rump = require('rump');
 var sourcemaps = require('gulp-sourcemaps');
 var util = require('gulp-util');
 
-gulp.task('rump:build:styles', function() {
+gulp.task(rump.taskName('build:styles'), function() {
   var source = path.join(rump.configs.main.paths.source.root,
                          rump.configs.main.paths.source.styles,
                          rump.configs.main.globs.build.styles);
@@ -19,13 +19,13 @@ gulp.task('rump:build:styles', function() {
   var sourceMap = rump.configs.main.styles.sourceMap;
 
   return gulp
-  .src([source].concat(rump.configs.main.globs.global))
-  .pipe((rump.configs.watch ? plumber : util.noop)())
-  .pipe(rework(at2x(), {sourcemap: sourceMap}))
-  .pipe((sourceMap ? sourcemaps.init : util.noop)({loadMaps: true}))
-  .pipe(pleeease(rump.configs.pleeease))
-  .pipe((sourceMap ? sourcemaps.write : util.noop)())
-  .pipe(gulp.dest(destination));
+    .src([source].concat(rump.configs.main.globs.global))
+    .pipe((rump.configs.watch ? plumber : util.noop)())
+    .pipe(rework(at2x(), {sourcemap: sourceMap}))
+    .pipe((sourceMap ? sourcemaps.init : util.noop)({loadMaps: true}))
+    .pipe(pleeease(rump.configs.pleeease))
+    .pipe((sourceMap ? sourcemaps.write : util.noop)())
+    .pipe(gulp.dest(destination));
 });
 
-gulp.tasks['rump:build'].dep.push('rump:build:styles');
+gulp.tasks[rump.taskName('build')].dep.push(rump.taskName('build:styles'));
