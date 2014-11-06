@@ -1,5 +1,8 @@
 # Changelog
 
+### 0.5.0
+- Update to match Rump 0.5.0 (use same minor version)
+
 ### 0.4.0
 - Update to match Rump 0.4.0 (use `npm dedupe`)
 
