@@ -14,7 +14,7 @@ leverage some future CSS features. For more information, visit the
 ## API
 The following is appended to the core Rump API:
 
-### `rump.addGulpTasks()`
+### `rump.addGulpTasks(options)`
 This module adds the following tasks:
 
 - `build:styles` will process CSS stylesheets with Pleeease. For more

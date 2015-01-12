@@ -2,7 +2,7 @@
   "name": "rump-styles",
   "description": "Rump piece for building CSS",
   "author": "Juan Placencia",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "license": "MIT",
   "homepage": "https://github.com/rumps/rump-styles",
   "repository": {
@@ -14,7 +14,7 @@
     "chalk": "^0.5.1",
     "extend": "^2.0.0",
     "globule": "^0.2.0",
-    "require-all": "^0.0.8",
+    "require-all": "^1.0.0",
     "rework-plugin-at2x": "^1.0.2",
     "gulp-pleeease": "^1.0.4",
     "gulp-plumber": "^0.6.6",

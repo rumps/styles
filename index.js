@@ -4,8 +4,8 @@ var rump = module.exports = require('rump');
 var configs = require('./configs');
 var originalAddGulpTasks = rump.addGulpTasks;
 
-rump.addGulpTasks = function() {
-  originalAddGulpTasks();
+rump.addGulpTasks = function(options) {
+  originalAddGulpTasks(options);
   require('./gulp');
   return rump;
 };
