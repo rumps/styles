@@ -41,11 +41,11 @@ This is the directory where styles are copied to. This path is relative to the
 root destination path. (If the default root and styles path is used, then the
 path would be `dist/styles`)
 
-#### `options.globs.build.styles` (`'*.css`)
+#### `options.globs.build.styles` (`'*.css'`)
 This specifies which stylesheets to process. By default it processes all CSS
 files in the immediate directory of the root source path for styles.
 
-#### `options.globs.watch.styles` (`'**/*.css`)
+#### `options.globs.watch.styles` (`'**/*.css'`)
 This specifies which stylesheets to monitor for changes. By default it watches
 all CSS files in the root source path for styles, including those in
 subdirectories.
