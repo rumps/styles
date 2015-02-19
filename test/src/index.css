@@ -1,0 +1,7 @@
+@import 'normalize.css/normalize.css';
+@import 'lib/variables.css';
+
+.test {
+  background-color: var(--color);
+  display: flex;
+}

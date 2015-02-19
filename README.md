@@ -1,7 +1,9 @@
 # Rump Styles
 [![NPM](http://img.shields.io/npm/v/rump-styles.svg?style=flat-square)](https://www.npmjs.org/package/rump-styles)
 ![License](http://img.shields.io/npm/l/rump-styles.svg?style=flat-square)
+[![Travis](http://img.shields.io/travis/rumps/rump-styles.svg?style=flat-square)](https://travis-ci.org/rumps/rump-styles)
 [![Dependencies](http://img.shields.io/david/rumps/rump-styles.svg?style=flat-square)](https://david-dm.org/rumps/rump-styles)
+[![Dev Dependencies](http://img.shields.io/david/dev/rumps/rump-styles.svg?style=flat-square)](https://david-dm.org/rumps/rump-styles#info=devDependencies)
 
 
 ## About
