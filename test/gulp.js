@@ -6,6 +6,7 @@ var gulp = require('gulp');
 var util = require('gulp-util');
 var any = require('lodash/collection/any');
 var toArray = require('lodash/lang/toArray');
+var path = require('path');
 var sinon = require('sinon');
 var rump = require('../lib');
 var configs = require('../lib/configs');
@@ -98,7 +99,7 @@ function hasVariablesFile(log) {
 }
 
 function hasPaths(log) {
-  return ~log.indexOf('test/src') && ~log.indexOf('tmp');
+  return ~log.indexOf('test' + path.sep + 'src') && ~log.indexOf('tmp');
 }
 
 function timeout(cb, delay) {
