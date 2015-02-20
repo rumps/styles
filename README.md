@@ -1,8 +1,8 @@
 # Rump Styles
 [![NPM](http://img.shields.io/npm/v/rump-styles.svg?style=flat-square)](https://www.npmjs.org/package/rump-styles)
 ![License](http://img.shields.io/npm/l/rump-styles.svg?style=flat-square)
-[![Travis](http://img.shields.io/travis/rumps/rump-styles.svg?style=flat-square)](https://travis-ci.org/rumps/rump-styles)
-[![Appveyor](http://img.shields.io/appveyor/ci/jupl/rump-styles.svg?style=flat-square)](https://ci.appveyor.com/project/jupl/rump-styles)
+[![Travis](http://img.shields.io/travis/rumps/rump-styles.svg?style=flat-square&label=travis)](https://travis-ci.org/rumps/rump-styles)
+[![Appveyor](http://img.shields.io/appveyor/ci/jupl/rump-styles.svg?style=flat-square&label=appveyor)](https://ci.appveyor.com/project/jupl/rump-styles)
 [![Dependencies](http://img.shields.io/david/rumps/rump-styles.svg?style=flat-square)](https://david-dm.org/rumps/rump-styles)
 [![Dev Dependencies](http://img.shields.io/david/dev/rumps/rump-styles.svg?style=flat-square)](https://david-dm.org/rumps/rump-styles#info=devDependencies)
 
