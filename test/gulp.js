@@ -99,7 +99,7 @@ function hasVariablesFile(log) {
 }
 
 function hasPaths(log) {
-  return ~log.indexOf('test' + path.sep + 'src') && ~log.indexOf('tmp');
+  return ~log.indexOf(path.join('test', 'src')) && ~log.indexOf('tmp');
 }
 
 function timeout(cb, delay) {
