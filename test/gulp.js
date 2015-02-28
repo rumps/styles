@@ -1,23 +1,22 @@
 'use strict';
 
-var assert = require('better-assert');
-var fs = require('graceful-fs');
+// Temporary fix until old LoDash is updated in some Gulp dependency
+Object.getPrototypeOf.toString = function() {
+  return 'function getPrototypeOf() { [native code] }';
+};
+
+var assert = require('assert');
+var bufferEqual = require('buffer-equal');
+var co = require('co');
+var fs = require('mz/fs');
 var gulp = require('gulp');
 var util = require('gulp-util');
-var any = require('lodash/collection/any');
-var toArray = require('lodash/lang/toArray');
 var path = require('path');
 var sinon = require('sinon');
+var sleep = require('timeout-then');
 var rump = require('../lib');
-var configs = require('../lib/configs');
 
 describe('rump styles tasks', function() {
-  var original;
-
-  before(function() {
-    original = fs.readFileSync('test/src/lib/variables.css').toString();
-  });
-
   beforeEach(function() {
     rump.configure({
       environment: 'development',
@@ -32,11 +31,6 @@ describe('rump styles tasks', function() {
         }
       }
     });
-    configs.watch = false;
-  });
-
-  after(function() {
-    fs.writeFileSync('test/src/lib/variables.css', original);
   });
 
   it('are added and defined', function() {
@@ -51,42 +45,69 @@ describe('rump styles tasks', function() {
     assert(gulp.tasks['spec:watch:styles']);
   });
 
-  it('info:styles', function() {
+  it('displays correct information in info task', function() {
     var oldLog = console.log;
     var logs = [];
     console.log = function() {
-      logs.push(util.colors.stripColor(toArray(arguments).join(' ')));
+      logs.push(util.colors.stripColor(Array.from(arguments).join(' ')));
     };
     gulp.start('spec:info');
     console.log = oldLog;
-    assert(any(logs, hasPaths));
-    assert(any(logs, hasCssFile));
-    assert(!any(logs, hasVariablesFile));
+    assert(logs.some(hasPaths));
+    assert(logs.some(hasCssFile));
+    assert(!logs.some(hasVariablesFile));
   });
 
-  it('build:styles, watch:styles', function(done) {
-    gulp.task('postbuild', ['spec:watch'], function() {
-      var firstResult = fs.readFileSync('tmp/index.css').toString();
-      assert(~firstResult.indexOf('display: flex'));
-      assert(~firstResult.indexOf('display: -webkit-flex'));
-      timeout(function() {
-        fs.writeFileSync('test/src/lib/variables.css', ':root{--color:black}');
-        timeout(function() {
-          var secondResult = fs.readFileSync('tmp/index.css').toString();
-          assert(firstResult !== secondResult);
-          rump.reconfigure({environment: 'production'});
-          fs.writeFileSync('test/src/lib/variables.css',
-                           ':root{--color:white}');
-          timeout(function() {
-            var thirdResult = fs.readFileSync('tmp/index.css').toString();
-            assert(firstResult.length > thirdResult.length);
-            assert(secondResult.length > thirdResult.length);
-            done();
-          }, 950);
-        }, 950);
-      }, 950);
+  describe('for building', function() {
+    var originals;
+
+    before(co.wrap(function*() {
+      originals = yield [
+        fs.readFile('test/src/index.css'),
+        fs.readFile('test/src/lib/variables.css')
+      ];
+    }));
+
+    before(function(done) {
+      gulp.task('postbuild', ['spec:watch'], function() {
+        done();
+      });
+      gulp.start('postbuild');
     });
-    gulp.start('postbuild');
+
+    afterEach(co.wrap(function*() {
+      yield sleep(800);
+      yield [
+        fs.writeFile('test/src/index.css', originals[0]),
+        fs.writeFile('test/src/lib/variables.css', originals[1])
+      ];
+      yield sleep(800);
+    }));
+
+    it('handles updates', co.wrap(function*() {
+      var firstContent = yield fs.readFile('tmp/index.css');
+      yield sleep(800);
+      fs.writeFileSync('test/src/lib/variables.css', ':root{--color:black}');
+      yield sleep(800);
+      var secondContent = yield fs.readFile('tmp/index.css');
+      assert(!bufferEqual(firstContent, secondContent));
+    }));
+
+    it('handles autoprefix', co.wrap(function*() {
+      var content = yield fs.readFile('tmp/index.css');
+      assert(content.toString().includes('display: flex'));
+      assert(content.toString().includes('display: -webkit-flex'));
+    }));
+
+    it('handles minification in production', co.wrap(function*() {
+      var firstContent = yield fs.readFile('tmp/index.css');
+      rump.reconfigure({environment: 'production'});
+      yield sleep(800);
+      fs.writeFileSync('test/src/lib/variables.css', ':root{--color:orange}');
+      yield sleep(800);
+      var secondContent = yield fs.readFile('tmp/index.css');
+      assert(firstContent.length > secondContent.length);
+    }));
   });
 });
 
@@ -95,17 +116,9 @@ function hasCssFile(log) {
 }
 
 function hasVariablesFile(log) {
-  return ~log.indexOf('variables.css');
+  return log.includes('variables.css');
 }
 
 function hasPaths(log) {
-  return ~log.indexOf(path.join('test', 'src')) && ~log.indexOf('tmp');
-}
-
-function timeout(cb, delay) {
-  process.nextTick(function() {
-    setTimeout(function() {
-      process.nextTick(cb);
-    }, delay || 0);
-  });
+  return log.includes(path.join('test', 'src')) && log.includes('tmp');
 }
