@@ -34,7 +34,6 @@ describe('rump styles tasks', function() {
   });
 
   it('are added and defined', function() {
-    this.timeout(20000);
     var callback = sinon.spy();
     rump.on('gulp:main', callback);
     rump.on('gulp:styles', callback);
