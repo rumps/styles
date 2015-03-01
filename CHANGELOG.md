@@ -1,5 +1,8 @@
 # Changelog
 
+#### 0.6.1
+- Rewrite source maps
+
 ### 0.6.0
 - Update to match Rump 0.6.0 (pass options)
 - Update `require-all`
