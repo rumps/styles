@@ -1,144 +1,113 @@
-'use strict';
+import '../src'
+import bufferEqual from 'buffer-equal'
+import convert from 'convert-source-map'
+import gulp from 'gulp'
+import timeout from 'timeout-then'
+import rump from 'rump'
+import {colors} from 'gulp-util'
+import {readFile, writeFile} from 'mz/fs'
+import {resolve, sep} from 'path'
+import {spy} from 'sinon'
 
-// Temporary fix until old LoDash is updated in some Gulp dependency
-Object.getPrototypeOf.toString = function() {
-  return 'function getPrototypeOf() { [native code] }';
-};
+const {stripColor} = colors,
+      protocol = process.platform === 'win32' ? 'file:///' : 'file://'
 
-var assert = require('assert');
-var bufferEqual = require('buffer-equal');
-var co = require('co');
-var convert = require('convert-source-map');
-var fs = require('mz/fs');
-var gulp = require('gulp');
-var util = require('gulp-util');
-var path = require('path');
-var sinon = require('sinon');
-var sleep = require('timeout-then');
-var rump = require('../lib');
-var protocol = process.platform === 'win32' ? 'file:///' : 'file://';
-
-describe('rump styles tasks', function() {
-  beforeEach(function() {
+describe('tasks', () => {
+  beforeEach(() => {
     rump.configure({
       environment: 'development',
       paths: {
-        source: {
-          root: 'test/src',
-          styles: ''
-        },
-        destination: {
-          root: 'tmp',
-          styles: ''
-        }
-      }
-    });
-  });
+        source: {root: 'test/src', styles: ''},
+        destination: {root: 'tmp', styles: ''},
+      },
+    })
+  })
 
-  it('are added and defined', function() {
-    var callback = sinon.spy();
-    rump.on('gulp:main', callback);
-    rump.on('gulp:styles', callback);
-    rump.addGulpTasks({prefix: 'spec'});
-    // TODO Remove no callback check on next major core update
-    assert(!callback.called || callback.calledTwice);
-    assert(gulp.tasks['spec:info:styles']);
-    assert(gulp.tasks['spec:build:styles']);
-    assert(gulp.tasks['spec:watch:styles']);
-  });
+  it('are added and defined', () => {
+    const callback = spy()
+    rump.on('gulp:main', callback)
+    rump.on('gulp:styles', callback)
+    rump.addGulpTasks({prefix: 'spec'})
+    callback.should.be.calledTwice()
+    gulp.tasks['spec:info:styles'].should.be.ok()
+    gulp.tasks['spec:build:styles'].should.be.ok()
+    gulp.tasks['spec:watch:styles'].should.be.ok()
+  })
 
-  it('displays correct information in info task', function() {
-    var oldLog = console.log;
-    var logs = [];
-    console.log = function() {
-      logs.push(util.colors.stripColor(Array.from(arguments).join(' ')));
-    };
-    gulp.start('spec:info');
-    console.log = oldLog;
-    assert(logs.some(hasPaths));
-    assert(logs.some(hasCssFile));
-    assert(!logs.some(hasVariablesFile));
-  });
+  it('displays correct information in info task', () => {
+    const logs = [],
+          {log} = console
+    console.log = (...args) => logs.push(stripColor(args.join(' ')))
+    gulp.start('spec:info')
+    console.log = log
+    logs.slice(-6).should.eql([
+      '',
+      '--- Styles v0.7.0',
+      `Processed CSS files from test${sep}src are copied with source maps to tmp`,
+      'Affected files:',
+      'index.css',
+      '',
+    ])
+  })
 
-  describe('for building', function() {
-    var originals;
+  describe('for building', () => {
+    let originals
 
-    before(co.wrap(function*() {
-      originals = yield [
-        fs.readFile('test/src/index.css'),
-        fs.readFile('test/src/lib/variables.css')
-      ];
-    }));
+    before(async(done) => {
+      originals = await Promise.all([
+        readFile('test/src/index.css'),
+        readFile('test/src/lib/variables.css'),
+      ])
+      gulp.task('postbuild', ['spec:watch'], () => done())
+      gulp.start('postbuild')
+    })
 
-    before(function(done) {
-      gulp.task('postbuild', ['spec:watch'], function() {
-        done();
-      });
-      gulp.start('postbuild');
-    });
+    afterEach(async() => {
+      await timeout(800)
+      await Promise.all([
+        writeFile('test/src/index.css', originals[0]),
+        writeFile('test/src/lib/variables.css', originals[1]),
+      ])
+      await timeout(800)
+    })
 
-    afterEach(co.wrap(function*() {
-      yield sleep(800);
-      yield [
-        fs.writeFile('test/src/index.css', originals[0]),
-        fs.writeFile('test/src/lib/variables.css', originals[1])
-      ];
-      yield sleep(800);
-    }));
+    it('handles updates', async() => {
+      const firstContent = await readFile('tmp/index.css')
+      let secondContent
+      await timeout(800)
+      await writeFile('test/src/lib/variables.css', ':root{--color:black}')
+      await timeout(800)
+      secondContent = await readFile('tmp/index.css')
+      bufferEqual(firstContent, secondContent).should.be.false()
+    })
 
-    it('handles updates', co.wrap(function*() {
-      var firstContent = yield fs.readFile('tmp/index.css');
-      yield sleep(800);
-      fs.writeFileSync('test/src/lib/variables.css', ':root{--color:black}');
-      yield sleep(800);
-      var secondContent = yield fs.readFile('tmp/index.css');
-      assert(!bufferEqual(firstContent, secondContent));
-    }));
+    it('handles autoprefix', async() => {
+      const content = (await readFile('tmp/index.css')).toString()
+      content.should.containEql('display: flex')
+      content.should.containEql('display: -webkit-flex')
+    })
 
-    it('handles autoprefix', co.wrap(function*() {
-      var content = yield fs.readFile('tmp/index.css');
-      assert(content.toString().includes('display: flex'));
-      assert(content.toString().includes('display: -webkit-flex'));
-    }));
+    it('handles source maps in development', async() => {
+      const content = await readFile('tmp/index.css'),
+            sourceMap = convert.fromSource(content.toString()),
+            paths = sourceMap
+              .getProperty('sources')
+              .map(x => x.replace(protocol, '').split('/').join(sep))
+      paths.should.eql([
+        resolve('node_modules/normalize.css/normalize.css'),
+        resolve('test/src/index.css'),
+      ])
+    })
 
-    it('handles source maps in development', co.wrap(function*() {
-      var content = yield fs.readFile('tmp/index.css');
-      var sourceMap = convert.fromSource(content.toString());
-      var exists = yield sourceMap
-            .getProperty('sources')
-            .filter(identity)
-            .map(checkIfExists);
-      exists.forEach(assert);
-    }));
-
-    it('handles minification in production', co.wrap(function*() {
-      var firstContent = yield fs.readFile('tmp/index.css');
-      rump.reconfigure({environment: 'production'});
-      yield sleep(800);
-      fs.writeFileSync('test/src/lib/variables.css', ':root{--color:orange}');
-      yield sleep(800);
-      var secondContent = yield fs.readFile('tmp/index.css');
-      assert(firstContent.length > secondContent.length);
-    }));
-  });
-});
-
-function hasCssFile(log) {
-  return log === 'index.css';
-}
-
-function hasVariablesFile(log) {
-  return log.includes('variables.css');
-}
-
-function hasPaths(log) {
-  return log.includes(path.join('test', 'src')) && log.includes('tmp');
-}
-
-function identity(x) {
-  return x;
-}
-
-function checkIfExists(url) {
-  return fs.exists(url.replace(protocol, '').split('/').join(path.sep));
-}
+    // it('handles minification in production', async() => {
+    //   const firstContent = await readFile('tmp/index.css')
+    //   let secondContent
+    //   rump.reconfigure({environment: 'production'})
+    //   await timeout(800)
+    //   writeFile('test/src/lib/variables.css', ':root{--color:orange}')
+    //   await timeout(800)
+    //   secondContent = await readFile('tmp/index.css')
+    //   firstContent.length.should.be.above(secondContent.length)
+    // })
+  })
+})

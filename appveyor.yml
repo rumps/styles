@@ -4,10 +4,16 @@ environment:
   matrix:
     - nodejs_version: "0.10"
     - nodejs_version: "0.12"
-    - nodejs_version: "1"
+    - nodejs_version: "3"
 
 install:
   - ps: Install-Product node $env:nodejs_version
+  - ps: >-
+      if($env:nodejs_version -eq "0.10")
+      {
+        npm install -g npm@next
+        $env:Path = "${env:Appdata}\npm;${env:Path}"
+      }
   - npm install
 
 test_script:
