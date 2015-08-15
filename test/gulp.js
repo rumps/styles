@@ -18,7 +18,7 @@ describe('tasks', () => {
       environment: 'development',
       paths: {
         source: {root: 'test/src', styles: ''},
-        destination: {root: 'tmp', styles: ''},
+        destination: {root: 'tmp', styles: '', images: 'images'},
       },
     })
   })
@@ -84,6 +84,14 @@ describe('tasks', () => {
         writeFile('test/src/lib/variables.styl', originals[7]),
       ])
       await timeout(800)
+    })
+
+    it('handles image paths for Sass', async() => {
+      const content = await readFile('tmp/sass.css')
+      content
+        .toString()
+        .should
+        .containEql('background-image: url("images/sample.png")')
     })
 
     it('handles updates', async() => {

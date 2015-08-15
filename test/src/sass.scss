@@ -3,5 +3,6 @@
 
 .test {
   background-color: $color;
+  background-image: image-url('sample.png');
   display: flex;
 }
