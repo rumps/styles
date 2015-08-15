@@ -23,9 +23,9 @@
 
 
 ## About
-Rump Styles is a Rump module for styles authored in plain CSS with
-[Pleeease](http://pleeease.io/) included to write better CSS with ease and even
-leverage some future CSS features. For more information, visit the
+Rump Styles is a Rump module for styles authored in CSS, LESS, Sass, and Stylus
+with [Pleeease](http://pleeease.io/) included to write better CSS with ease and
+even leverage some future CSS features. For more information, visit the
 [core repository](https://github.com/rumps/core).
 
 
@@ -59,11 +59,11 @@ This is the directory where styles are copied to. This path is relative to the
 root destination path. (If the default root and styles path is used, then the
 path would be `dist/styles`)
 
-#### `options.globs.build.styles` (`'*.css'`)
+#### `options.globs.build.styles` (`'*.{css,less,scss,styl}`)
 This specifies which stylesheets to process. By default it processes all CSS
 files in the immediate directory of the root source path for styles.
 
-#### `options.globs.watch.styles` (`'**/*.css'`)
+#### `options.globs.watch.styles` (`'**/*.{css,less,scss,styl}`)
 This specifies which stylesheets to monitor for changes. By default it watches
 all CSS files in the root source path for styles, including those in
 subdirectories.
