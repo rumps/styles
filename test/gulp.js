@@ -40,12 +40,15 @@ describe('tasks', () => {
     console.log = (...args) => logs.push(stripColor(args.join(' ')))
     gulp.start('spec:info')
     console.log = log
-    logs.slice(-6).should.eql([
+    logs.slice(-9).should.eql([
       '',
       '--- Styles v0.7.0',
       `Processed CSS files from test${sep}src are copied with source maps to tmp`,
       'Affected files:',
       'index.css',
+      'less.less',
+      'sass.scss',
+      'stylus.styl',
       '',
     ])
   })
@@ -57,6 +60,12 @@ describe('tasks', () => {
       originals = await Promise.all([
         readFile('test/src/index.css'),
         readFile('test/src/lib/variables.css'),
+        readFile('test/src/less.less'),
+        readFile('test/src/lib/variables.less'),
+        readFile('test/src/sass.scss'),
+        readFile('test/src/lib/variables.scss'),
+        readFile('test/src/stylus.styl'),
+        readFile('test/src/lib/variables.styl'),
       ])
       gulp.task('postbuild', ['spec:watch'], () => done())
       gulp.start('postbuild')
@@ -67,47 +76,111 @@ describe('tasks', () => {
       await Promise.all([
         writeFile('test/src/index.css', originals[0]),
         writeFile('test/src/lib/variables.css', originals[1]),
+        writeFile('test/src/less.less', originals[2]),
+        writeFile('test/src/lib/variables.less', originals[3]),
+        writeFile('test/src/sass.scss', originals[4]),
+        writeFile('test/src/lib/variables.scss', originals[5]),
+        writeFile('test/src/stylus.styl', originals[6]),
+        writeFile('test/src/lib/variables.styl', originals[7]),
       ])
       await timeout(800)
     })
 
     it('handles updates', async() => {
-      const firstContent = await readFile('tmp/index.css')
-      let secondContent
+      const firstContents = await Promise.all([
+        readFile('tmp/index.css'),
+        readFile('tmp/less.css'),
+        readFile('tmp/sass.css'),
+        readFile('tmp/stylus.css'),
+      ])
+      let secondContents
       await timeout(800)
-      await writeFile('test/src/lib/variables.css', ':root{--color:black}')
+      await Promise.all([
+        writeFile('test/src/lib/variables.css', ':root{--color:black}'),
+        writeFile('test/src/lib/variables.less', '@color: black;'),
+        writeFile('test/src/lib/variables.scss', '$color: black;'),
+        writeFile('test/src/lib/variables.styl', 'color = black'),
+      ])
       await timeout(800)
-      secondContent = await readFile('tmp/index.css')
-      bufferEqual(firstContent, secondContent).should.be.false()
+      secondContents = await Promise.all([
+        readFile('tmp/index.css'),
+        readFile('tmp/less.css'),
+        readFile('tmp/sass.css'),
+        readFile('tmp/stylus.css'),
+      ])
+      firstContents.forEach((firstContent, index) => {
+        bufferEqual(firstContent, secondContents[index]).should.be.false()
+      })
     })
 
     it('handles autoprefix', async() => {
-      const content = (await readFile('tmp/index.css')).toString()
-      content.should.containEql('display: flex')
-      content.should.containEql('display: -webkit-flex')
+      const contents = await Promise.all([
+        readFile('tmp/index.css'),
+        readFile('tmp/less.css'),
+        readFile('tmp/sass.css'),
+        readFile('tmp/stylus.css'),
+      ])
+      contents.map(content => {
+        content.toString().should.containEql('display: flex')
+        content.toString().should.containEql('display: -webkit-flex')
+      })
     })
 
     it('handles source maps in development', async() => {
-      const content = await readFile('tmp/index.css'),
-            sourceMap = convert.fromSource(content.toString()),
-            paths = sourceMap
-              .getProperty('sources')
+      const css = readFile('tmp/index.css'),
+            less = readFile('tmp/less.css'),
+            sass = readFile('tmp/sass.css'),
+            stylus = readFile('tmp/stylus.css'),
+            contents = await Promise.all([css, less, sass, stylus]),
+            pathSet = contents
+              .map(x => convert.fromSource(x.toString()))
+              .map(x => x.getProperty('sources').sort()),
+            paths = [].concat(...pathSet)
+              .filter(x => x)
               .map(x => x.replace(protocol, '').split('/').join(sep))
       paths.should.eql([
         resolve('node_modules/normalize.css/normalize.css'),
         resolve('test/src/index.css'),
+        resolve('node_modules/bootstrap/less/buttons.less'),
+        resolve('node_modules/bootstrap/less/mixins/buttons.less'),
+        resolve('node_modules/bootstrap/less/mixins/opacity.less'),
+        resolve('node_modules/bootstrap/less/mixins/tab-focus.less'),
+        resolve('node_modules/bootstrap/less/mixins/vendor-prefixes.less'),
+        resolve('node_modules/normalize.css/normalize.css'),
+        resolve('test/src/less.less'),
+        resolve('node_modules/normalize-compass/normalize.scss'),
+        resolve('test/src/sass.scss'),
+        resolve('node_modules/normalize.css/normalize.css'),
+        resolve('test/src/stylus.styl'),
       ])
     })
 
-    // it('handles minification in production', async() => {
-    //   const firstContent = await readFile('tmp/index.css')
-    //   let secondContent
-    //   rump.reconfigure({environment: 'production'})
-    //   await timeout(800)
-    //   writeFile('test/src/lib/variables.css', ':root{--color:orange}')
-    //   await timeout(800)
-    //   secondContent = await readFile('tmp/index.css')
-    //   firstContent.length.should.be.above(secondContent.length)
-    // })
+    it('handles minification in production', async() => {
+      const firstContents = await Promise.all([
+        readFile('tmp/index.css'),
+        readFile('tmp/less.css'),
+        readFile('tmp/sass.css'),
+        readFile('tmp/stylus.css'),
+      ])
+      let secondContents
+      rump.reconfigure({environment: 'production'})
+      await timeout(800)
+      await Promise.all([
+        writeFile('test/src/lib/variables.css', ':root{--color:orange}'),
+        writeFile('test/src/lib/variables.less', '@color: orange;'),
+        writeFile('test/src/lib/variables.scss', '$color: orange;'),
+        writeFile('test/src/lib/variables.styl', 'color = orange'),
+      ])
+      await timeout(800)
+      secondContents = await Promise.all([
+        readFile('tmp/index.css'),
+        readFile('tmp/less.css'),
+        readFile('tmp/sass.css'),
+        readFile('tmp/stylus.css'),
+      ])
+      firstContents.forEach((firstContent, index) => {
+        firstContent.length.should.be.above(secondContents[index].length)
+      })
+    })
   })
 })
