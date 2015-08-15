@@ -56,7 +56,8 @@ describe('tasks', () => {
   describe('for building', () => {
     let originals
 
-    before(async(done) => {
+    before(async function(done) {
+      this.timeout(4000)
       originals = await Promise.all([
         readFile('test/src/index.css'),
         readFile('test/src/lib/variables.css'),
