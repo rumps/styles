@@ -4,6 +4,7 @@ import gulp, {tasks} from 'gulp'
 import pleeease from 'gulp-pleeease'
 import plumber from 'gulp-plumber'
 import filter from 'gulp-filter'
+import rename from 'gulp-rename'
 import rump from 'rump'
 import through from 'through2'
 import {noop} from 'gulp-util'
@@ -23,30 +24,28 @@ task(name('build:styles'), () => {
         source = join(sourcePath, configs.main.globs.build.styles),
         destination = join(configs.main.paths.destination.root,
                            configs.main.paths.destination.styles),
+        nonCssFilter = filter(['**/*.{less,scss,styl}'], {restore: true}),
         cssFilter = filter(['**/*.css'], {restore: true}),
-        cssConfig = extend({
+        cssConfig = extend({}, rump.configs.pleeease, {
           less: false,
           sass: false,
           stylus: false,
-        }, rump.configs.pleeease),
+        }),
         lessFilter = filter(['**/*.less'], {restore: true}),
-        lessConfig = extend({
-          less: true,
+        lessConfig = extend({}, rump.configs.pleeease, {
           sass: false,
           stylus: false,
-        }, rump.configs.pleeease),
+        }),
         scssFilter = filter(['**/*.scss'], {restore: true}),
-        scssConfig = extend({
+        scssConfig = extend({}, rump.configs.pleeease, {
           less: false,
-          sass: true,
           stylus: false,
-        }, rump.configs.pleeease),
+        }),
         stylFilter = filter(['**/*.styl'], {restore: true}),
-        stylConfig = extend({
+        stylConfig = extend({}, rump.configs.pleeease, {
           less: false,
           sass: false,
-          stylus: true,
-        }, rump.configs.pleeease)
+        })
 
   return src([source].concat(configs.main.globs.global))
     .pipe((configs.watch ? plumber : noop)())
@@ -63,6 +62,9 @@ task(name('build:styles'), () => {
     .pipe(pleeease(stylConfig))
     .pipe(stylFilter.restore)
     .pipe((sourceMap ? through.obj : noop)(sourceMapRewriter))
+    .pipe(nonCssFilter)
+    .pipe(rename({extname: '.css'}))
+    .pipe(nonCssFilter.restore)
     .pipe(dest(destination))
 
   // Clear out autoprefixer's data and fix paths to match original
@@ -89,6 +91,9 @@ task(name('build:styles'), () => {
     function rewriteUrl(url) {
       if(url === '<no-source>') {
         url = file.path
+      }
+      else if(url === '<no-output>') {
+        return ''
       }
       else if(!/^(node_modules|bower_components)\//.test(url)) {
         url = join(sourcePath, url)

@@ -29,6 +29,7 @@
     "gulp-filter": "^3.0.0",
     "gulp-pleeease": "^1.2.0",
     "gulp-plumber": "^1.0.1",
+    "gulp-rename": "^1.2.2",
     "gulp-util": "^3.0.6",
     "through2": "^2.0.0"
   },
