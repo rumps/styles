@@ -74,19 +74,16 @@ describe('tasks', function() {
 
     beforeEach(() => timeout(1000))
 
-    afterEach(async() => {
-      await timeout(1000)
-      await Promise.all([
-        writeFile('test/fixtures/index.css', originals[0]),
-        writeFile('test/fixtures/lib/variables.css', originals[1]),
-        writeFile('test/fixtures/less.less', originals[2]),
-        writeFile('test/fixtures/lib/variables.less', originals[3]),
-        writeFile('test/fixtures/sass.scss', originals[4]),
-        writeFile('test/fixtures/lib/variables.scss', originals[5]),
-        writeFile('test/fixtures/stylus.styl', originals[6]),
-        writeFile('test/fixtures/lib/variables.styl', originals[7]),
-      ])
-    })
+    afterEach(() => Promise.all([
+      writeFile('test/fixtures/index.css', originals[0]),
+      writeFile('test/fixtures/lib/variables.css', originals[1]),
+      writeFile('test/fixtures/less.less', originals[2]),
+      writeFile('test/fixtures/lib/variables.less', originals[3]),
+      writeFile('test/fixtures/sass.scss', originals[4]),
+      writeFile('test/fixtures/lib/variables.scss', originals[5]),
+      writeFile('test/fixtures/stylus.styl', originals[6]),
+      writeFile('test/fixtures/lib/variables.styl', originals[7]),
+    ]))
 
     it('handles image paths for Sass', async() => {
       const content = await readFile('tmp/sass.css')
