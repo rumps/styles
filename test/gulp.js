@@ -12,7 +12,9 @@ import {spy} from 'sinon'
 const {stripColor} = colors,
       protocol = process.platform === 'win32' ? 'file:///' : 'file://'
 
-describe('tasks', () => {
+describe('tasks', function() {
+  this.timeout(0)
+
   beforeEach(() => {
     rump.configure({
       environment: 'development',
@@ -72,7 +74,7 @@ describe('tasks', () => {
     })
 
     afterEach(async() => {
-      await timeout(800)
+      await timeout(1000)
       await Promise.all([
         writeFile('test/src/index.css', originals[0]),
         writeFile('test/src/lib/variables.css', originals[1]),
@@ -83,7 +85,7 @@ describe('tasks', () => {
         writeFile('test/src/stylus.styl', originals[6]),
         writeFile('test/src/lib/variables.styl', originals[7]),
       ])
-      await timeout(800)
+      await timeout(1000)
     })
 
     it('handles image paths for Sass', async() => {
@@ -102,14 +104,14 @@ describe('tasks', () => {
         readFile('tmp/stylus.css'),
       ])
       let secondContents
-      await timeout(800)
+      await timeout(1000)
       await Promise.all([
         writeFile('test/src/lib/variables.css', ':root{--color:black}'),
         writeFile('test/src/lib/variables.less', '@color: black;'),
         writeFile('test/src/lib/variables.scss', '$color: black;'),
         writeFile('test/src/lib/variables.styl', 'color = black'),
       ])
-      await timeout(800)
+      await timeout(1000)
       secondContents = await Promise.all([
         readFile('tmp/index.css'),
         readFile('tmp/less.css'),
@@ -172,14 +174,14 @@ describe('tasks', () => {
       ])
       let secondContents
       rump.reconfigure({environment: 'production'})
-      await timeout(800)
+      await timeout(1000)
       await Promise.all([
         writeFile('test/src/lib/variables.css', ':root{--color:orange}'),
         writeFile('test/src/lib/variables.less', '@color: orange;'),
         writeFile('test/src/lib/variables.scss', '$color: orange;'),
         writeFile('test/src/lib/variables.styl', 'color = orange'),
       ])
-      await timeout(800)
+      await timeout(1000)
       secondContents = await Promise.all([
         readFile('tmp/index.css'),
         readFile('tmp/less.css'),
