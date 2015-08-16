@@ -19,7 +19,7 @@ describe('tasks', function() {
     rump.configure({
       environment: 'development',
       paths: {
-        source: {root: 'test/src', styles: ''},
+        source: {root: 'test/fixtures', styles: ''},
         destination: {root: 'tmp', styles: '', images: 'images'},
       },
     })
@@ -45,7 +45,7 @@ describe('tasks', function() {
     logs.slice(-9).should.eql([
       '',
       '--- Styles v0.7.0',
-      `Processed CSS files from test${sep}src are copied with source maps to tmp`,
+      `Processed CSS files from test${sep}fixtures are copied with source maps to tmp`,
       'Affected files:',
       'index.css',
       'less.less',
@@ -60,14 +60,14 @@ describe('tasks', function() {
 
     before(async(done) => {
       originals = await Promise.all([
-        readFile('test/src/index.css'),
-        readFile('test/src/lib/variables.css'),
-        readFile('test/src/less.less'),
-        readFile('test/src/lib/variables.less'),
-        readFile('test/src/sass.scss'),
-        readFile('test/src/lib/variables.scss'),
-        readFile('test/src/stylus.styl'),
-        readFile('test/src/lib/variables.styl'),
+        readFile('test/fixtures/index.css'),
+        readFile('test/fixtures/lib/variables.css'),
+        readFile('test/fixtures/less.less'),
+        readFile('test/fixtures/lib/variables.less'),
+        readFile('test/fixtures/sass.scss'),
+        readFile('test/fixtures/lib/variables.scss'),
+        readFile('test/fixtures/stylus.styl'),
+        readFile('test/fixtures/lib/variables.styl'),
       ])
       gulp.task('postbuild', ['spec:watch'], () => done())
       gulp.start('postbuild')
@@ -76,14 +76,14 @@ describe('tasks', function() {
     afterEach(async() => {
       await timeout(1000)
       await Promise.all([
-        writeFile('test/src/index.css', originals[0]),
-        writeFile('test/src/lib/variables.css', originals[1]),
-        writeFile('test/src/less.less', originals[2]),
-        writeFile('test/src/lib/variables.less', originals[3]),
-        writeFile('test/src/sass.scss', originals[4]),
-        writeFile('test/src/lib/variables.scss', originals[5]),
-        writeFile('test/src/stylus.styl', originals[6]),
-        writeFile('test/src/lib/variables.styl', originals[7]),
+        writeFile('test/fixtures/index.css', originals[0]),
+        writeFile('test/fixtures/lib/variables.css', originals[1]),
+        writeFile('test/fixtures/less.less', originals[2]),
+        writeFile('test/fixtures/lib/variables.less', originals[3]),
+        writeFile('test/fixtures/sass.scss', originals[4]),
+        writeFile('test/fixtures/lib/variables.scss', originals[5]),
+        writeFile('test/fixtures/stylus.styl', originals[6]),
+        writeFile('test/fixtures/lib/variables.styl', originals[7]),
       ])
       await timeout(1000)
     })
@@ -106,10 +106,10 @@ describe('tasks', function() {
       let secondContents
       await timeout(1000)
       await Promise.all([
-        writeFile('test/src/lib/variables.css', ':root{--color:black}'),
-        writeFile('test/src/lib/variables.less', '@color: black;'),
-        writeFile('test/src/lib/variables.scss', '$color: black;'),
-        writeFile('test/src/lib/variables.styl', 'color = black'),
+        writeFile('test/fixtures/lib/variables.css', ':root{--color:black}'),
+        writeFile('test/fixtures/lib/variables.less', '@color: black;'),
+        writeFile('test/fixtures/lib/variables.scss', '$color: black;'),
+        writeFile('test/fixtures/lib/variables.styl', 'color = black'),
       ])
       await timeout(1000)
       secondContents = await Promise.all([
@@ -150,18 +150,18 @@ describe('tasks', function() {
               .map(x => x.replace(protocol, '').split('/').join(sep))
       paths.should.eql([
         resolve('node_modules/normalize.css/normalize.css'),
-        resolve('test/src/index.css'),
+        resolve('test/fixtures/index.css'),
         resolve('node_modules/bootstrap/less/buttons.less'),
         resolve('node_modules/bootstrap/less/mixins/buttons.less'),
         resolve('node_modules/bootstrap/less/mixins/opacity.less'),
         resolve('node_modules/bootstrap/less/mixins/tab-focus.less'),
         resolve('node_modules/bootstrap/less/mixins/vendor-prefixes.less'),
         resolve('node_modules/normalize.css/normalize.css'),
-        resolve('test/src/less.less'),
+        resolve('test/fixtures/less.less'),
         resolve('node_modules/normalize-compass/normalize.scss'),
-        resolve('test/src/sass.scss'),
+        resolve('test/fixtures/sass.scss'),
         resolve('node_modules/normalize.css/normalize.css'),
-        resolve('test/src/stylus.styl'),
+        resolve('test/fixtures/stylus.styl'),
       ])
     })
 
@@ -176,10 +176,10 @@ describe('tasks', function() {
       rump.reconfigure({environment: 'production'})
       await timeout(1000)
       await Promise.all([
-        writeFile('test/src/lib/variables.css', ':root{--color:orange}'),
-        writeFile('test/src/lib/variables.less', '@color: orange;'),
-        writeFile('test/src/lib/variables.scss', '$color: orange;'),
-        writeFile('test/src/lib/variables.styl', 'color = orange'),
+        writeFile('test/fixtures/lib/variables.css', ':root{--color:orange}'),
+        writeFile('test/fixtures/lib/variables.less', '@color: orange;'),
+        writeFile('test/fixtures/lib/variables.scss', '$color: orange;'),
+        writeFile('test/fixtures/lib/variables.styl', 'color = orange'),
       ])
       await timeout(1000)
       secondContents = await Promise.all([
