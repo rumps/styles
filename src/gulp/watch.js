@@ -2,10 +2,10 @@ import gulp, {tasks} from 'gulp'
 import rump from 'rump'
 import {join} from 'path'
 
-const {configs} = rump,
-      name = ::rump.taskName,
+const name = ::rump.taskName,
       task = ::gulp.task,
-      watch = ::gulp.watch
+      watch = ::gulp.watch,
+      {configs} = rump
 
 task(name('watch:styles'), [name('build:styles')], () => {
   const glob = join(configs.main.paths.source.root,

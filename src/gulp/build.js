@@ -10,12 +10,12 @@ import through from 'through2'
 import {noop} from 'gulp-util'
 import {join, resolve, sep} from 'path'
 
-const {configs} = rump,
-      dest = ::gulp.dest,
+const dest = ::gulp.dest,
       name = ::rump.taskName,
       protocol = process.platform === 'win32' ? 'file:///' : 'file://',
       src = ::gulp.src,
-      task = ::gulp.task
+      task = ::gulp.task,
+      {configs} = rump
 
 task(name('build:styles'), () => {
   const {sourceMap} = configs.main.styles,
