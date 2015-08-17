@@ -36,7 +36,7 @@ describe('tasks', function() {
   it('displays correct information in info task', () => {
     const logs = [],
           {log} = console
-    console.log = (...args) => logs.push(stripColor(args.join(' ')))
+    console.log = newLog
     gulp.start('spec:info')
     console.log = log
     logs.slice(-9).should.eql([
@@ -50,6 +50,26 @@ describe('tasks', function() {
       'stylus.styl',
       '',
     ])
+    logs.length = 0
+    console.log = newLog
+    gulp.start('spec:info:prod')
+    console.log = log
+    logs.slice(-9).should.eql([
+      '',
+      '--- Styles v0.7.0',
+      `Processed CSS files from test${sep}fixtures are minified and copied to tmp`,
+      'Affected files:',
+      'index.css',
+      'less.less',
+      'sass.scss',
+      'stylus.styl',
+      '',
+    ])
+    rump.reconfigure({environment: 'development'})
+
+    function newLog(...args) {
+      logs.push(stripColor(args.join(' ')))
+    }
   })
 
   describe('for building', () => {
