@@ -15,7 +15,7 @@ const protocol = process.platform === 'win32' ? 'file:///' : 'file://',
 describe('tasks', function() {
   this.timeout(0)
 
-  beforeEach(() => {
+  afterEach(() => {
     rump.configure({environment: 'development', paths: {
       source: {root: 'test/fixtures', styles: ''},
       destination: {root: 'tmp', styles: '', images: 'images'},
@@ -65,7 +65,12 @@ describe('tasks', function() {
       'stylus.styl',
       '',
     ])
-    rump.reconfigure({environment: 'development'})
+    rump.reconfigure({paths: {source: {images: 'nonexistant'}}})
+    logs.length = 0
+    console.log = newLog
+    gulp.start('spec:info')
+    console.log = log
+    logs.length.should.not.be.above(4)
 
     function newLog(...args) {
       logs.push(stripColor(args.join(' ')))
