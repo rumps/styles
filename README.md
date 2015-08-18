@@ -1,6 +1,7 @@
 # Rump Styles
 [![NPM](http://img.shields.io/npm/v/rump-styles.svg?style=flat-square)](https://www.npmjs.org/package/rump-styles)
 ![License](http://img.shields.io/npm/l/rump-styles.svg?style=flat-square)
+[![Issues](https://img.shields.io/github/issues/rumps/issues.svg?style=flat-square)](https://github.com/rumps/issues/issues)
 
 
 ## Status
