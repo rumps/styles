@@ -65,7 +65,7 @@ describe('tasks', function() {
       'stylus.styl',
       '',
     ])
-    rump.reconfigure({paths: {source: {images: 'nonexistant'}}})
+    rump.reconfigure({paths: {source: {styles: 'nonexistant'}}})
     logs.length = 0
     console.log = newLog
     gulp.start('spec:info')
