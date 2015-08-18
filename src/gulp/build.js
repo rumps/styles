@@ -18,8 +18,7 @@ const dest = ::gulp.dest,
       {configs} = rump
 
 task(name('build:styles'), () => {
-  const {sourceMap} = configs.main.styles,
-        sourcePath = join(configs.main.paths.source.root,
+  const sourcePath = join(configs.main.paths.source.root,
                           configs.main.paths.source.styles),
         source = join(sourcePath, configs.main.globs.build.styles),
         destination = join(configs.main.paths.destination.root,
@@ -45,7 +44,8 @@ task(name('build:styles'), () => {
         stylConfig = extend({}, rump.configs.pleeease, {
           less: false,
           sass: false,
-        })
+        }),
+        {sourceMap} = configs.main.styles
 
   return src([source].concat(configs.main.globs.global))
     .pipe((configs.watch ? plumber : noop)())
