@@ -1,6 +1,6 @@
 import convert from 'convert-source-map'
 import extend from 'extend'
-import gulp, {tasks} from 'gulp'
+import gulp, {dest, src, tasks} from 'gulp'
 import pleeease from 'gulp-pleeease'
 import plumber from 'gulp-plumber'
 import filter from 'gulp-filter'
@@ -10,10 +10,8 @@ import through from 'through2'
 import {noop} from 'gulp-util'
 import {join, resolve, sep} from 'path'
 
-const dest = ::gulp.dest,
-      name = ::rump.taskName,
+const name = ::rump.taskName,
       protocol = process.platform === 'win32' ? 'file:///' : 'file://',
-      src = ::gulp.src,
       task = ::gulp.task,
       {configs} = rump
 
