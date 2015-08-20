@@ -1,17 +1,33 @@
 # Rump Styles
 [![NPM](http://img.shields.io/npm/v/rump-styles.svg?style=flat-square)](https://www.npmjs.org/package/rump-styles)
 ![License](http://img.shields.io/npm/l/rump-styles.svg?style=flat-square)
-[![Travis](http://img.shields.io/travis/rumps/rump-styles.svg?style=flat-square&label=travis)](https://travis-ci.org/rumps/rump-styles)
+[![Issues](https://img.shields.io/github/issues/rumps/issues.svg?style=flat-square)](https://github.com/rumps/issues/issues)
+
+
+## Status
+
+### Master
+[![Dependencies](http://img.shields.io/david/rumps/styles.svg?style=flat-square)](https://david-dm.org/rumps/styles)
+[![Dev Dependencies](http://img.shields.io/david/dev/rumps/styles.svg?style=flat-square)](https://david-dm.org/rumps/styles#info=devDependencies)
+<br>
+[![Travis](http://img.shields.io/travis/rumps/styles.svg?style=flat-square&label=travis)](https://travis-ci.org/rumps/styles)
 [![Appveyor](http://img.shields.io/appveyor/ci/jupl/rump-styles.svg?style=flat-square&label=appveyor)](https://ci.appveyor.com/project/jupl/rump-styles)
-[![Dependencies](http://img.shields.io/david/rumps/rump-styles.svg?style=flat-square)](https://david-dm.org/rumps/rump-styles)
-[![Dev Dependencies](http://img.shields.io/david/dev/rumps/rump-styles.svg?style=flat-square)](https://david-dm.org/rumps/rump-styles#info=devDependencies)
+[![Codecov](http://img.shields.io/codecov/c/github/rumps/styles.svg?style=flat-square&label=codecov)](https://codecov.io/github/rumps/styles?view=all)
+
+### Develop
+[![Dependencies](http://img.shields.io/david/rumps/styles/develop.svg?style=flat-square)](https://david-dm.org/rumps/styles/develop)
+[![Dev Dependencies](http://img.shields.io/david/dev/rumps/styles/develop.svg?style=flat-square)](https://david-dm.org/rumps/styles/develop#info=devDependencies)
+<br>
+[![Travis](http://img.shields.io/travis/rumps/styles/develop.svg?style=flat-square&label=travis)](https://travis-ci.org/rumps/styles)
+[![Appveyor](http://img.shields.io/appveyor/ci/jupl/rump-styles/develop.svg?style=flat-square&label=appveyor)](https://ci.appveyor.com/project/jupl/rump-styles)
+[![Codecov](http://img.shields.io/codecov/c/github/rumps/styles/develop.svg?style=flat-square&label=codecov)](https://codecov.io/github/rumps/styles?branch=develop&view=all)
 
 
 ## About
-Rump Styles is a Rump module for styles authored in plain CSS with
-[Pleeease](http://pleeease.io/) included to write better CSS with ease and even
-leverage some future CSS features. For more information, visit the
-[Rump repository](https://github.com/rumps/rump).
+Rump Styles is a Rump module for styles authored in CSS, LESS, Sass, and Stylus
+with [Pleeease](http://pleeease.io/) included to write better CSS with ease and
+even leverage some future CSS features. For more information, visit the
+[core repository](https://github.com/rumps/core).
 
 
 ## API
@@ -44,11 +60,11 @@ This is the directory where styles are copied to. This path is relative to the
 root destination path. (If the default root and styles path is used, then the
 path would be `dist/styles`)
 
-#### `options.globs.build.styles` (`'*.css'`)
+#### `options.globs.build.styles` (`'*.{css,less,scss,styl}`)
 This specifies which stylesheets to process. By default it processes all CSS
 files in the immediate directory of the root source path for styles.
 
-#### `options.globs.watch.styles` (`'**/*.css'`)
+#### `options.globs.watch.styles` (`'**/*.{css,less,scss,styl}`)
 This specifies which stylesheets to monitor for changes. By default it watches
 all CSS files in the root source path for styles, including those in
 subdirectories.

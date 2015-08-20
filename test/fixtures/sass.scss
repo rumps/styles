@@ -1,0 +1,8 @@
+@import 'normalize-compass/normalize';
+@import 'lib/variables';
+
+.test {
+  background-color: $color;
+  background-image: image-url('sample.png');
+  display: flex;
+}
