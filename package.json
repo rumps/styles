@@ -10,6 +10,16 @@
     "type": "git",
     "url": "https://github.com/rumps/styles"
   },
+  "keywords": [
+    "autoprefixer",
+    "css",
+    "gulp",
+    "less",
+    "pleeease",
+    "rump",
+    "rump-module",
+    "sass"
+  ],
   "scripts": {
     "preci": "npm run lint",
     "ci": "babel-node node_modules/.bin/isparta cover --report json _mocha",
