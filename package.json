@@ -58,7 +58,7 @@
     "mz": "^2.0.0",
     "normalize-compass": "^3.0.1",
     "normalize.css": "^3.0.3",
-    "rump": "^0.7.6",
+    "rump": "^0.8.0",
     "should": "^7.0.2",
     "should-sinon": "0.0.3",
     "sinon": "^1.15.4",
