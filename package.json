@@ -1,6 +1,6 @@
 {
   "name": "rump-styles",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "author": "Juan Placencia",
   "description": "Rump piece for building CSS",
   "license": "MIT",
@@ -10,19 +10,29 @@
     "type": "git",
     "url": "https://github.com/rumps/styles"
   },
+  "keywords": [
+    "autoprefixer",
+    "css",
+    "gulp",
+    "less",
+    "pleeease",
+    "rump",
+    "rump-module",
+    "sass"
+  ],
   "scripts": {
-    "preci": "npm run lint",
-    "ci": "babel-node node_modules/.bin/isparta cover --report json _mocha",
-    "postci": "codecov < coverage/coverage.json",
+    "codecov": "npm run coverage",
+    "postcodecov": "codecov < coverage/coverage.json",
     "precompile": "[ -d lib ] && trash lib || true",
     "compile": "babel src --out-dir lib --source-maps=inline",
-    "coverage": "babel-node node_modules/.bin/isparta cover --report html --report text _mocha -- -R min",
+    "coverage": "babel-node node_modules/isparta/bin/isparta cover --report json --report html --report text node_modules/mocha/bin/_mocha -- -R min",
     "lint": "eslint src test",
     "pub": "npm run test && npm run compile && npm publish",
     "pretest": "npm run lint",
     "test": "mocha"
   },
   "dependencies": {
+    "babel-runtime": "^5.8.20",
     "convert-source-map": "^1.1.1",
     "extend": "^3.0.0",
     "globule": "^0.2.0",
@@ -36,6 +46,7 @@
   "devDependencies": {
     "babel": "^5.8.19",
     "babel-eslint": "^4.0.5",
+    "bluebird": "^2.9.34",
     "bootstrap": "^3.3.5",
     "buffer-equal": "^0.0.1",
     "codecov.io": "^0.1.5",
@@ -47,7 +58,7 @@
     "mz": "^2.0.0",
     "normalize-compass": "^3.0.1",
     "normalize.css": "^3.0.3",
-    "rump": "^0.7.6",
+    "rump": "^0.8.0",
     "should": "^7.0.2",
     "should-sinon": "0.0.3",
     "sinon": "^1.15.4",
