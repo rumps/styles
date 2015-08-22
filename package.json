@@ -1,6 +1,6 @@
 {
   "name": "rump-styles",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "author": "Juan Placencia",
   "description": "Rump piece for building CSS",
   "license": "MIT",
@@ -32,6 +32,7 @@
     "test": "mocha"
   },
   "dependencies": {
+    "babel-runtime": "^5.8.20",
     "convert-source-map": "^1.1.1",
     "extend": "^3.0.0",
     "globule": "^0.2.0",
@@ -45,6 +46,7 @@
   "devDependencies": {
     "babel": "^5.8.19",
     "babel-eslint": "^4.0.5",
+    "bluebird": "^2.9.34",
     "bootstrap": "^3.3.5",
     "buffer-equal": "^0.0.1",
     "codecov.io": "^0.1.5",

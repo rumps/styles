@@ -1,5 +1,8 @@
 # Changelog
 
+### 0.8.0
+- Make use of `babel-runtime`
+
 ### 0.7.0
 - Use Babel fully for ES2015+
 - Replace JSHint with ESLint
