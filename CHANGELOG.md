@@ -1,5 +1,8 @@
 # Changelog
 
+#### 0.8.1
+- Fix broken main path
+
 ### 0.8.0
 - Make use of `babel-runtime`
 

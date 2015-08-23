@@ -1,11 +1,11 @@
 {
   "name": "rump-styles",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "author": "Juan Placencia",
   "description": "Rump piece for building CSS",
   "license": "MIT",
   "homepage": "https://github.com/rumps/styles",
-  "main": "./index.js",
+  "main": "./lib",
   "repository": {
     "type": "git",
     "url": "https://github.com/rumps/styles"
