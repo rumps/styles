@@ -41,7 +41,7 @@ describe('tasks', function() {
     console.log = log
     logs.slice(-9).should.eql([
       '',
-      '--- Styles v0.8.0',
+      '--- Styles v0.8.1',
       `Processed CSS files from test${sep}fixtures are copied with source maps to tmp`,
       'Affected files:',
       'index.css',
@@ -56,7 +56,7 @@ describe('tasks', function() {
     console.log = log
     logs.slice(-9).should.eql([
       '',
-      '--- Styles v0.8.0',
+      '--- Styles v0.8.1',
       `Processed CSS files from test${sep}fixtures are minified and copied to tmp`,
       'Affected files:',
       'index.css',
