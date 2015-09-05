@@ -11,6 +11,6 @@ rump.on('gulp:main', (...args) => {
   rump.emit('gulp:styles', ...args)
 })
 
-Object.defineProperty(rump.configs, 'pleeease', {
+Reflect.defineProperty(rump.configs, 'pleeease', {
   get: () => rump.configs.main.styles.pleeease,
 })

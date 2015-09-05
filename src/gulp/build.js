@@ -10,40 +10,40 @@ import through from 'through2'
 import {noop} from 'gulp-util'
 import {join, resolve, sep} from 'path'
 
-const name = ::rump.taskName,
-      protocol = process.platform === 'win32' ? 'file:///' : 'file://',
-      task = ::gulp.task,
-      {configs} = rump
+const name = ::rump.taskName
+const protocol = process.platform === 'win32' ? 'file:///' : 'file://'
+const task = ::gulp.task
+const {configs} = rump
 
 task(name('build:styles'), () => {
   const sourcePath = join(configs.main.paths.source.root,
-                          configs.main.paths.source.styles),
-        source = join(sourcePath, configs.main.globs.build.styles),
-        destination = join(configs.main.paths.destination.root,
-                           configs.main.paths.destination.styles),
-        nonCssFilter = filter(['**/*.{less,scss,styl}'], {restore: true}),
-        cssFilter = filter(['**/*.css'], {restore: true}),
-        cssConfig = extend({}, rump.configs.pleeease, {
-          less: false,
-          sass: false,
-          stylus: false,
-        }),
-        lessFilter = filter(['**/*.less'], {restore: true}),
-        lessConfig = extend({}, rump.configs.pleeease, {
-          sass: false,
-          stylus: false,
-        }),
-        scssFilter = filter(['**/*.scss'], {restore: true}),
-        scssConfig = extend({}, rump.configs.pleeease, {
-          less: false,
-          stylus: false,
-        }),
-        stylFilter = filter(['**/*.styl'], {restore: true}),
-        stylConfig = extend({}, rump.configs.pleeease, {
-          less: false,
-          sass: false,
-        }),
-        {sourceMap} = configs.main.styles
+                          configs.main.paths.source.styles)
+  const source = join(sourcePath, configs.main.globs.build.styles)
+  const destination = join(configs.main.paths.destination.root,
+                           configs.main.paths.destination.styles)
+  const nonCssFilter = filter(['**/*.{less,scss,styl}'], {restore: true})
+  const cssFilter = filter(['**/*.css'], {restore: true})
+  const cssConfig = extend({}, rump.configs.pleeease, {
+    less: false,
+    sass: false,
+    stylus: false,
+  })
+  const lessFilter = filter(['**/*.less'], {restore: true})
+  const lessConfig = extend({}, rump.configs.pleeease, {
+    sass: false,
+    stylus: false,
+  })
+  const scssFilter = filter(['**/*.scss'], {restore: true})
+  const scssConfig = extend({}, rump.configs.pleeease, {
+    less: false,
+    stylus: false,
+  })
+  const stylFilter = filter(['**/*.styl'], {restore: true})
+  const stylConfig = extend({}, rump.configs.pleeease, {
+    less: false,
+    sass: false,
+  })
+  const {sourceMap} = configs.main.styles
 
   return src([source].concat(configs.main.globs.global))
     .pipe((configs.watch ? plumber : noop)())
@@ -72,8 +72,8 @@ task(name('build:styles'), () => {
     }
 
     let content = file.contents.toString()
-    const sourceMap = convert.fromSource(content),
-          sources = sourceMap.getProperty('sources')
+    const sourceMap = convert.fromSource(content)
+    const sources = sourceMap.getProperty('sources')
     sourceMap.setProperty('sourceRoot', null)
     sourceMap.setProperty('sources', sources.map(rewriteUrl))
     content = [
@@ -86,7 +86,8 @@ task(name('build:styles'), () => {
     file.contents = new Buffer(content)
     return callback(null, file)
 
-    function rewriteUrl(url) {
+    function rewriteUrl(oldUrl) {
+      let url = oldUrl
       if(url === '<no-source>') {
         url = file.path
       }

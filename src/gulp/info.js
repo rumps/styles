@@ -5,19 +5,19 @@ import {colors} from 'gulp-util'
 import {join, relative} from 'path'
 import {version} from '../../package'
 
-const name = ::rump.taskName,
-      task = ::gulp.task,
-      {blue, green, magenta, yellow} = colors,
-      {configs} = rump
+const name = ::rump.taskName
+const task = ::gulp.task
+const {blue, green, magenta, yellow} = colors
+const {configs} = rump
 
 task(name('info:styles'), () => {
   const glob = join(configs.main.paths.source.root,
                     configs.main.paths.source.styles,
-                    configs.main.globs.build.styles),
-        files = find([glob].concat(configs.main.globs.global)),
-        source = join(configs.main.paths.source.root,
-                      configs.main.paths.source.styles),
-        destination = join(configs.main.paths.destination.root,
+                    configs.main.globs.build.styles)
+  const files = find([glob].concat(configs.main.globs.global))
+  const source = join(configs.main.paths.source.root,
+                      configs.main.paths.source.styles)
+  const destination = join(configs.main.paths.destination.root,
                            configs.main.paths.destination.styles)
   let action = 'copied'
   if(!files.length) {

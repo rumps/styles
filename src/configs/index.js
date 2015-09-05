@@ -21,9 +21,9 @@ export function rebuild() {
   }, configs.main.styles)
 
   const source = join(configs.main.paths.source.root,
-                      configs.main.paths.source.styles),
-        paths = ['node_modules', 'bower_components', source],
-        sassOptions = {includePaths: paths}
+                      configs.main.paths.source.styles)
+  const paths = ['node_modules', 'bower_components', source]
+  const sassOptions = {includePaths: paths}
   if(configs.main.paths.destination.images) {
     sassOptions.imagePath = relative(configs.main.paths.destination.styles,
                                      configs.main.paths.destination.images)
